@@ -7,8 +7,9 @@
 using namespace std;
 
 int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, int totalAcumulado, int numFilieiras, int numMacieiras, vector<vector<int>> &resultados,  vector<vector<int>> &melhoresCaminhos) {
-
+  // Verifica se o resultado do calculo já está salvo
   if(resultados[linha][coluna] == -1) {
+    // Para a primeira linha apenas armazena o valor do elemento
     if(linha == 0) {
       resultados[linha][coluna] = macieiras[linha][coluna];
       return macieiras[linha][coluna];
@@ -37,7 +38,8 @@ int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, in
       direita = macieiras[numFilieiras - 1][posDireita];
       calculoDireita = calculaSomaPosicao(linha - 1, posDireita, macieiras, totalDireita, numFilieiras, numMacieiras, resultados, melhoresCaminhos);
     }
-
+    // Verifica em qual dos caminhos a soma sera maximizada
+    // Quando encontra o caminho que maximiza a soma grava a coluna de desvio e o valor maximizado
     if(calculoEsquerda >= calculoMeio) {
       if(calculoEsquerda >= calculoDireita) {
         resultados[linha][coluna] = macieiras[linha][coluna] + calculoEsquerda;
@@ -65,6 +67,8 @@ int main() {
   // Obtem os dados do grid
   scanf("%d %d", &numFilieiras, &numMacieiras);
   vector<vector<int>> resultados;
+  // Vetor que armazena o caminho percorrido
+  // melhroesCaminhos em [i][j] armazena qual o melhor desvio para o elemento na posição [i][j] de modo que a soma de [i][j] seja maximizada
   vector<vector<int>> melhoresCaminhos;
   // Le as macieiras
   for(int i=0; i < numFilieiras; i++){
@@ -87,8 +91,10 @@ int main() {
   } 
   int melhorColunaCaminho = 0;
   int maxValor = 0;
+  // Calcula a soma para cada posição 
   for(int j=0; j < numMacieiras; j++) {
     int valorPosicao = calculaSomaPosicao(numFilieiras - 1, j, macieiras, macieiras[numFilieiras - 1][j], numFilieiras, numMacieiras, resultados, melhoresCaminhos);
+    // Verifica se o valor é o maior possivel
     if(valorPosicao > maxValor) {
       maxValor = valorPosicao;
       melhorColunaCaminho = j;
@@ -98,6 +104,7 @@ int main() {
   int pos = melhorColunaCaminho;
   vector<int> melhorCaminho;
   melhorCaminho.push_back(melhorColunaCaminho);
+  // Orderna o vetor de melhores caminho
   for(int i = numFilieiras - 1; i >0; i--) {
     melhorCaminho.push_back(melhoresCaminhos[i][pos]);
     pos = melhoresCaminhos[i][pos];
@@ -105,6 +112,7 @@ int main() {
  
   printf("%d\n", maxValor);
 
+  // Imprime o maior valor e o caminho percorrido para chegar até ele
   for(std::vector<int>::size_type k = melhorCaminho.size() - 1; k < melhorCaminho.size(); k--) {
     if(k != 0) {
       printf("%d ", melhorCaminho[k]);
