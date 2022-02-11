@@ -25,17 +25,19 @@ int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, in
     int calculoEsquerda = 0;
     int calculoDireita = 0;
     int totalMeio = totalAcumulado + meio;
-    
+    // Calcula a soma no mesmo sentido
     int calculoMeio = calculaSomaPosicao(linha - 1, posMeio, macieiras, totalMeio, numFilieiras, numMacieiras, resultados, melhoresCaminhos);
 
     if(coluna != 0) {
       esquerda = macieiras[linha - 1][posEsquerda];
       int totalEsquerda = totalAcumulado + esquerda;
+      // Calcula a soma para diagonal esquerda
       calculoEsquerda = calculaSomaPosicao(linha - 1, posEsquerda, macieiras, totalEsquerda, numFilieiras, numMacieiras, resultados, melhoresCaminhos);
     } 
     if (coluna != (numMacieiras - 1)) {
       int totalDireita = totalAcumulado + direita;
       direita = macieiras[numFilieiras - 1][posDireita];
+      // Calcula a soma para diagonal direita
       calculoDireita = calculaSomaPosicao(linha - 1, posDireita, macieiras, totalDireita, numFilieiras, numMacieiras, resultados, melhoresCaminhos);
     }
     // Verifica em qual dos caminhos a soma sera maximizada
