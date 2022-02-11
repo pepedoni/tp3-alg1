@@ -45,17 +45,13 @@ int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, in
       } else {
         resultados[linha][coluna] = macieiras[linha][coluna] + calculoDireita;
         melhoresCaminhos[linha][coluna] = posDireita;
-        //melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posDireita].begin(), melhoresCaminhos[linha - 1][posDireita].end());
       }
     } else if(calculoMeio >= calculoDireita) {
       resultados[linha][coluna] = macieiras[linha][coluna] + calculoMeio;
       melhoresCaminhos[linha][coluna]= posMeio;
-      //melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posMeio].begin(), melhoresCaminhos[linha - 1][posMeio].end());
     } else {
       resultados[linha][coluna] = macieiras[linha][coluna] + calculoDireita;
       melhoresCaminhos[linha][coluna] = posDireita;
-      //melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posDireita].begin(), melhoresCaminhos[linha - 1][posDireita].end());
-      
     }
   } 
   return resultados[linha][coluna];
