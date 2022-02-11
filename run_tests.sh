@@ -1,7 +1,7 @@
 EXEC=$1
 TMP_OUT=$2
 echo "Entrei aquii"
-for i in {5..5..1}; do
+for i in {1..6..1}; do
   testname_input=$(printf "0%01d-input.txt" $i)
   testname_output=$(printf "0%01d-output.txt" $i)
   echo $testname_input

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, int totalAcumulado, int numFilieiras, int numMacieiras, vector<vector<int>> &resultados,  vector<vector<vector<int>>> &melhoresCaminhos) {
+int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, int totalAcumulado, int numFilieiras, int numMacieiras, vector<vector<int>> &resultados,  vector<vector<int>> &melhoresCaminhos) {
 
   if(resultados[linha][coluna] == -1) {
     if(linha == 0) {
@@ -41,20 +41,22 @@ int calculaSomaPosicao(int linha, int coluna, vector<vector<int>> &macieiras, in
     if(calculoEsquerda >= calculoMeio) {
       if(calculoEsquerda >= calculoDireita) {
         resultados[linha][coluna] = macieiras[linha][coluna] + calculoEsquerda;
-        melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posEsquerda].begin(), melhoresCaminhos[linha - 1][posEsquerda].end());
+        melhoresCaminhos[linha][coluna] = posEsquerda;
       } else {
         resultados[linha][coluna] = macieiras[linha][coluna] + calculoDireita;
-        melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posDireita].begin(), melhoresCaminhos[linha - 1][posDireita].end());
+        melhoresCaminhos[linha][coluna] = posDireita;
+        //melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posDireita].begin(), melhoresCaminhos[linha - 1][posDireita].end());
       }
     } else if(calculoMeio >= calculoDireita) {
       resultados[linha][coluna] = macieiras[linha][coluna] + calculoMeio;
-      melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posMeio].begin(), melhoresCaminhos[linha - 1][posMeio].end());
+      melhoresCaminhos[linha][coluna]= posMeio;
+      //melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posMeio].begin(), melhoresCaminhos[linha - 1][posMeio].end());
     } else {
       resultados[linha][coluna] = macieiras[linha][coluna] + calculoDireita;
-      melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posDireita].begin(), melhoresCaminhos[linha - 1][posDireita].end());
+      melhoresCaminhos[linha][coluna] = posDireita;
+      //melhoresCaminhos[linha][coluna].insert(melhoresCaminhos[linha][coluna].end(), melhoresCaminhos[linha - 1][posDireita].begin(), melhoresCaminhos[linha - 1][posDireita].end());
       
     }
-    
   } 
   return resultados[linha][coluna];
 }
@@ -67,32 +69,28 @@ int main() {
   // Obtem os dados do grid
   scanf("%d %d", &numFilieiras, &numMacieiras);
   vector<vector<int>> resultados;
-  vector<vector<int>> melhoresCaminho;
-  vector<vector<vector<int>>> melhoresCaminhos;
+  vector<vector<int>> melhoresCaminhos;
   // Le as macieiras
   for(int i=0; i < numFilieiras; i++){
     vector<int> filaMacieira;
     vector<int> resultadoLinha;
-    vector<vector<int>> melhorCaminho;
+    vector<int> caminhoLinha;
     for(int j=0; j < numMacieiras; j++) {
       // Le valor das maças
       int macieira = 0;
       scanf("%d", &macieira);
       filaMacieira.push_back(macieira);
-
       // Inicializa as variaveis
-      vector<int> preencheMelhorCaminho = {j};
-      melhorCaminho.push_back(preencheMelhorCaminho);
+      caminhoLinha.push_back(-1);
       resultadoLinha.push_back(-1);
     
     }
-    melhoresCaminhos.push_back(melhorCaminho);
+    melhoresCaminhos.push_back(caminhoLinha);
     resultados.push_back(resultadoLinha);
     macieiras.push_back(filaMacieira);
   } 
   int melhorColunaCaminho = 0;
   int maxValor = 0;
-  
   for(int j=0; j < numMacieiras; j++) {
     int valorPosicao = calculaSomaPosicao(numFilieiras - 1, j, macieiras, macieiras[numFilieiras - 1][j], numFilieiras, numMacieiras, resultados, melhoresCaminhos);
     if(valorPosicao > maxValor) {
@@ -101,14 +99,21 @@ int main() {
     }
     
   }
+  int pos = melhorColunaCaminho;
+  vector<int> melhorCaminho;
+  melhorCaminho.push_back(melhorColunaCaminho);
+  for(int i = numFilieiras - 1; i >0; i--) {
+    melhorCaminho.push_back(melhoresCaminhos[i][pos]);
+    pos = melhoresCaminhos[i][pos];
+  }
  
-  vector<int> caminhoPrint = melhoresCaminhos[numFilieiras - 1][melhorColunaCaminho];
   printf("%d\n", maxValor);
-  for(std::vector<int>::size_type k = caminhoPrint.size() - 1; k < caminhoPrint.size(); k--) {
+
+  for(std::vector<int>::size_type k = melhorCaminho.size() - 1; k < melhorCaminho.size(); k--) {
     if(k != 0) {
-      printf("%d ", caminhoPrint[k]);
+      printf("%d ", melhorCaminho[k]);
     } else {
-      printf("%d", caminhoPrint[k]);
+      printf("%d", melhorCaminho[k]);
     }
   }
    
